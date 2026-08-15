@@ -5,38 +5,41 @@
 ## Stack
 
 - Strapi 3+
-- Node.js 14+
-- Postgres 10+
+- Node.js 16.x
+- PostgreSQL, MySQL/MariaDB, or SQLite
 
-## Development
+## Local development
 
-- `make install` - install all dependencies
-- `make dev` - start strapi dev-server
-- `make build` - build strapi cms
+Copy the environment template, adjust it for your local database, install dependencies, and start Strapi:
 
-**ENV**
+```bash
+cp .env.example .env
+make install
+make dev
+```
 
-```env
-HOST=0.0.0.0
-PORT=1337
+Strapi is available at [http://localhost:1337](http://localhost:1337); create and manage CMS users at [http://localhost:1337/admin](http://localhost:1337/admin).
 
-DATABASE_TYPE=postgres
-DATABASE_URL=postgres://postgres:strapi@0.0.0.0:5432/strapi
+## Database configuration
 
-IMAGEKIT_FOLDER=/strapi
-IMAGEKIT_PUBLIC_KEY=strapi
-IMAGEKIT_PRIVATE_KEY=strapi
-IMAGEKIT_URL=https://ik.imagekit.io/strapi
+`config/database.js` supports `DATABASE_TYPE=postgres`, `mysql`, and `sqlite`. PostgreSQL and MySQL/MariaDB use `DATABASE_URL`; SQLite uses `DATABASE_FILENAME` and defaults to `.tmp/data.db`. Set the matching variables in `.env` rather than relying on the sample credentials.
 
-AWS_BUCKET=strapi
-AWS_ENDPOINT=https://s3.pl-waw.scw.cloud
-AWS_ACCESS_KEY_ID=strapi
-AWS_ACCESS_SECRET=strapi
+## Docker database services
 
-ADMIN_JWT_SECRET=strapi
+`docker-compose.yml` provides database services only: MariaDB on [localhost:3306](http://localhost:3306), PostgreSQL on [localhost:5432](http://localhost:5432), and Adminer on [http://localhost:8080](http://localhost:8080). Start them with:
 
-VERCEL_TOKEN=strapi
-VERCEL_TEAM_ID=strapi
-VERCEL_PROJECT_ID=strapi
-VERCEL_TRIGGER_PRODUCTION=strapi
+```bash
+make docker-up
+```
+
+For the bundled PostgreSQL service, configure `DATABASE_TYPE=postgres` and a PostgreSQL `DATABASE_URL` in `.env`. For MariaDB, use `DATABASE_TYPE=mysql` and a MySQL-compatible `DATABASE_URL`.
+
+## Commands
+
+```bash
+make install       # install locked dependencies
+make dev           # run Strapi in development mode
+make start         # build and start Strapi
+make strapi-build  # build the Strapi admin
+make clean         # remove Strapi build caches
 ```
